@@ -1,0 +1,119 @@
+.notes-list {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 8px;
+}
+
+.notes-list__input {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.notes-list__notes {
+  flex: 1 0 0;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notes-list-500 .notes-list__note {
+  font-size: small;
+  background: black;
+  color: white;
+}
+
+.notes-list__button {
+  /* Reset button styles */
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: inherit;
+  font: inherit;
+
+  border-radius: 4px;
+
+  box-shadow: inset 0 -2px rgba(0, 0, 0, 0.1);
+
+  cursor: pointer;
+}
+
+.notes-list__button mark {
+  background-color: #333;
+  color: white;
+}
+
+.notes-list__note {
+  display: block;
+  padding: 6px 12px;
+  background: white;
+  border-radius: 4px;
+}
+
+.notes-list-pro-mode .notes-list__note {
+  font-size: small;
+  background: #424242;
+  color: white;
+}
+
+.notes-list__note:hover {
+  background: #ffe866;
+}
+
+.notes-list-pro-mode .notes-list__note:hover {
+  background: #757575;
+}
+
+.notes-list__note_active,
+.notes-list__note:active {
+  background: #ffdb01;
+}
+
+.notes-list-pro-mode .notes-list__note_active,
+.notes-list-pro-mode .notes-list__note:active {
+  background: #757575;
+}
+
+.notes-list__note-meta {
+  display: block;
+  font-size: 12px;
+  background: #ffdb01;
+  width: fit-content;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.notes-list-pro-mode .notes-list__note-meta {
+  background: #212121;
+}
+
+:is(.notes-list__note:hover, .notes-list__note_active) .notes-list__note-meta {
+  background: #424242;
+  color: white;
+}
+
+.notes-list-pro-mode .notes-list__note_active .notes-list__note-meta {
+  background: #ffdb01;
+  color: black;
+}
+
+.notes-list__controls {
+  flex: none;
+
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  font-size: 9px;
+}
+
+.notes-list__control {
+  font-size: 9px !important;
+  letter-spacing: 0 !important;
+  font-family: inherit !important;
+  text-transform: none !important;
+}
