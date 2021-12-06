@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { createContext } from "use-context-selector";
 import "./index.css";
 
 export const ThemeContext = createContext();
@@ -14,8 +15,19 @@ export function ThemeContextProvider({ children }) {
     };
   }, [theme]);
 
+  const themeColors = Math.random();
+  const setThemeColors = Math.random();
+  const themeDebugValues = Math.random();
+  console.log("ThemeContextProvider rerendered", {
+    themeColors,
+    setThemeColors,
+    themeDebugValues,
+  });
+
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider
+      value={{ theme, setTheme, themeColors, setThemeColors, themeDebugValues }}
+    >
       {children}
     </ThemeContext.Provider>
   );

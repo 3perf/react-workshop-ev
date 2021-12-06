@@ -1,12 +1,18 @@
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
-import { useContext } from "react";
+import { memo } from "react";
 import { ThemeContext } from "../ThemeContext";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import Brightness2Icon from "@material-ui/icons/Brightness2";
 import "./index.css";
 
+import { useContextSelector } from "use-context-selector";
+
 function ThemeSwitcher() {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const theme = useContextSelector(ThemeContext, (context) => context.theme);
+  const setTheme = useContextSelector(
+    ThemeContext,
+    (context) => context.setTheme
+  );
 
   return (
     <div className="theme-switcher">
@@ -30,4 +36,6 @@ function ThemeSwitcher() {
 
 ThemeSwitcher.whyDidYouRender = true;
 
-export default ThemeSwitcher;
+const ThemeSwitcherMemo = memo(ThemeSwitcher);
+
+export default ThemeSwitcherMemo;

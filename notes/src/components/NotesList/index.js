@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Button, ButtonGroup } from "@material-ui/core";
 import "./index.css";
 import FilterInput from "../FilterInput";
@@ -33,16 +33,19 @@ function NotesList({
 
             return text.toLowerCase().includes(filter.toLowerCase());
           })
-          .map(({ id, text, date }) => (
-            <NoteButton
-              key={id}
-              isActive={activeNoteId === id}
-              onNoteActivated={() => onNoteActivated(id)}
-              text={text}
-              filterText={filter}
-              date={date}
-            />
-          ))}
+          .map(({ id, text, date }) => {
+            return (
+              <NoteButtonOptimized
+                key={id}
+                onNoteActivated={onNoteActivated}
+                id={id}
+                activeNoteId={activeNoteId}
+                text={text}
+                filter={filter}
+                date={date}
+              />
+            );
+          })}
       </div>
 
       <div className="notes-list__controls">
@@ -80,3 +83,39 @@ function NotesList({
 }
 
 export default NotesList;
+
+function NoteButtonOptimized({
+  onNoteActivated,
+  id,
+  activeNoteId,
+  text,
+  filter,
+  date,
+}) {
+  const onNoteActivatedProp = useCallback(
+    () => onNoteActivated(id),
+    [onNoteActivated, id]
+  );
+
+  /*
+    let memoizedFn
+    let memoizedDeps
+    const useCallback = (fn, deps) => {
+      if (deps[0] === memoizedDeps[0] && deps[1] === memoizedDeps[1] && ...) {
+        return memoizedFn
+      }
+
+      memoizedFn = fn
+      return fn
+    }
+  */
+  return (
+    <NoteButton
+      isActive={activeNoteId === id}
+      onNoteActivated={onNoteActivatedProp}
+      text={text}
+      filterText={filter}
+      date={date}
+    />
+  );
+}

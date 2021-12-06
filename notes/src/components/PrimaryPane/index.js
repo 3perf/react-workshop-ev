@@ -1,9 +1,9 @@
 import { Button } from "@material-ui/core";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import fakeApi from "../../utils/fakeApi";
 import NoteEditor from "../NoteEditor";
 import NoteView from "../NoteView";
-import { ActiveAuthors } from "../ActiveAuthors";
+import ActiveAuthors from "../ActiveAuthors";
 import spinner from "./spinner.svg";
 import "./index.css";
 import ThemeSwitcher from "../ThemeSwitcher";
@@ -41,7 +41,9 @@ const authors = [
   },
 ];
 
-function PrimaryPane({ activeNoteId, notes, saveNote }) {
+const defaultArray = [];
+
+function PrimaryPane({ activeNoteId, notes, saveNote, activeMonth }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [publishedAt, setPublishedAt] = useState(null);
@@ -62,6 +64,30 @@ function PrimaryPane({ activeNoteId, notes, saveNote }) {
     setIsLoading(false);
   };
 
+  const authorsActiveThisMonth = useMemo(
+    () => authors.filter((i) => i.lastActiveDate.includes(activeMonth)),
+    [activeMonth]
+  );
+
+  /* MobX → @computed get authorsActiveThisMonth() { return this.authors?.filter((i) => i.lastActiveDate.includes(this.activeMonth)) }
+      reselect’s createSelector()
+  */
+
+  /*
+    let memoizedValue
+    let memoizedDeps
+    const useMemo = (fn, deps) => {
+      if (deps[0] === memoizedDeps[0] && deps[1] === memoizedDeps[1] && ...) {
+        return memoizedValue
+      }
+
+      memoizedValue = fn()
+      return memoizedValue
+    }
+
+    const useCallback = (fn, deps) => useMemo(() => fn, deps)
+  */
+
   if (!activeNoteId) {
     return (
       <div className="primary-pane__empty-editor">
@@ -77,11 +103,7 @@ function PrimaryPane({ activeNoteId, notes, saveNote }) {
     <div className="primary-pane">
       <div className="primary-pane__header">
         <h1 className="primary-pane__header-text">Editor</h1>
-        <ActiveAuthors
-          activeAuthors={
-            authors.filter((i) => i.lastActiveDate.includes("2021-12")) || []
-          }
-        />
+        <ActiveAuthors activeAuthors={authorsActiveThisMonth || defaultArray} />
         <ThemeSwitcher />
       </div>
 

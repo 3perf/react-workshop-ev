@@ -1,7 +1,8 @@
 import { Avatar } from "@material-ui/core";
 import { AvatarGroup } from "@material-ui/lab";
+import { memo } from "react";
 
-export function ActiveAuthors({ activeAuthors }) {
+function ActiveAuthors({ activeAuthors }) {
   return (
     <div className="primary-pane__authors">
       <div className="primary-pane__authors-last-active">
@@ -16,3 +17,7 @@ export function ActiveAuthors({ activeAuthors }) {
     </div>
   );
 }
+
+const ActiveAuthorsMemo = memo(ActiveAuthors);
+
+export default ActiveAuthorsMemo;

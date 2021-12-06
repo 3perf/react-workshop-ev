@@ -1,6 +1,6 @@
 import Jabber from "jabber";
 import { nanoid } from "nanoid";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { deleteNotes, getNotes, putNote } from "../../utils/storage";
 import NotesList from "../NotesList";
 import PrimaryPane from "../PrimaryPane";
@@ -12,15 +12,22 @@ import fakeApi from "../../utils/fakeApi";
 
 const jabber = new Jabber();
 
+function NoteListHeader() {
+  const [isPro, setIsPro] = useState(null);
+
+  useEffect(() => {
+    fakeApi.getProStatus().then(() => setIsPro(false));
+  }, []);
+
+  return <h1>NoteList {isPro && "Pro"}</h1>;
+}
+
+const NoteListHeaderMemo = memo(NoteListHeader);
+
 function App() {
   const [notes, setNotes] = useState(getNotes());
   const [activeNoteId, setActiveNoteId] = useState(null);
   const [publishingTarget, setPublishingTarget] = useState("localhost");
-  const [isPro, setIsPro] = useState(null);
-
-  useEffect(() => {
-    fakeApi.getProStatus().then(setIsPro);
-  }, []);
 
   const saveNote = (id, { text, date }) => {
     putNote(id, { text, date });
@@ -83,12 +90,14 @@ function App() {
     setActiveNoteId(null);
   };
 
+  // React.createElement('div', { className: 'notes' }, [/*...*/]) => {}
+
   return (
     <ThemeContextProvider>
       <div className="notes">
         <div className="notes__columns">
           <div className="notes__column notes__column_list">
-            <h1>NoteList {isPro && "Pro"}</h1>
+            <NoteListHeaderMemo />
             <div className="notes__column-content">
               <NotesList
                 notes={notes}
@@ -105,6 +114,7 @@ function App() {
                 activeNoteId={activeNoteId}
                 notes={notes}
                 saveNote={saveNote}
+                activeMonth="2021-12"
               />
             </div>
           </div>

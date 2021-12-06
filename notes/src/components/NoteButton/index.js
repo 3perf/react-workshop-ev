@@ -1,8 +1,9 @@
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import { format } from "date-fns";
+import { memo } from "react";
 
-function NoteButton({ isActive, onNoteActivated, text, filterText, date }) {
+const NoteButton = ({ isActive, onNoteActivated, text, filterText, date }) => {
   const className = [
     "notes-list__button",
     "notes-list__note",
@@ -19,7 +20,17 @@ function NoteButton({ isActive, onNoteActivated, text, filterText, date }) {
       {generateNoteHeader(text, filterText)}
     </button>
   );
-}
+};
+
+const NoteButtonMemo = memo(NoteButton);
+
+/*
+  isActive === prev.isActive &&
+    onNoteActivated === prev.onNoteActivated &&
+    text === prev.text &&
+    filterText === prev.filterText &&
+    date === prev.date
+*/
 
 function generateNoteHeader(text, filterText) {
   let firstLine = text
@@ -74,4 +85,4 @@ function generateNoteHeader(text, filterText) {
   );
 }
 
-export default NoteButton;
+export default NoteButtonMemo;
