@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import { format } from "date-fns";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 
 function NoteButton({
   isActive,
@@ -19,22 +19,27 @@ function NoteButton({
     .filter((i) => i !== false)
     .join(" ");
 
-  return (
-    <button className={className} onClick={() => onNoteActivated(noteId)}>
-      <span className="notes-list__note-meta">
-        {format(date, "d MMM yyyy")}
-      </span>
-      {generateNoteHeader(text, filterText)}
-    </button>
-  );
-}
-
-function generateNoteHeader(text, filterText) {
   let firstLine = text
     .split("\n")
     .map((i) => i.trim())
     .filter((i) => i.length > 0)[0];
 
+  const noteHeader = useMemo(
+    () => generateNoteHeader(firstLine, filterText), // => { $$typeof: Symbol(react.element), type: "mark", props: { children: "bbb~~aa~~ccc~~aa~~c" } }
+    [firstLine, firstLine.includes(filterText) ? filterText : null]
+  );
+
+  return (
+    <button className={className} onClick={() => onNoteActivated(noteId)}>
+      <span className="notes-list__note-meta">
+        {format(date, "d MMM yyyy")}
+      </span>
+      {noteHeader}
+    </button>
+  );
+}
+
+function generateNoteHeader(firstLine, filterText) {
   // Wrap the filter text with a `<mark>` tag.
   // (The algorithm below is a bit buggy: if the note itself has any `~~something~~` entries,
   // they will be turned into `<mark>` as well. But this is alright for demo purposes.)
