@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
-import { useState } from "react";
+import React, { useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 import fakeApi from "../../utils/fakeApi";
 import NoteEditor from "../NoteEditor";
 import NoteView from "../NoteView";
@@ -41,6 +42,114 @@ const authors = [
   },
 ];
 
+/*
+
+    useState = (initialState) => useReducer((state, action) => {
+      return action;
+    }), initialState)
+
+    const [componentState, dispatch] = useReducer((state, action) => {
+      if (action.type === "SET_IS_LOADING") {
+        return {
+          ...state,
+          isLoading: action.payload,
+        };
+      }
+
+      if (action.type === "SET_PUBLISHED_AT") {
+        return {
+          ...state,
+          publishedAt: action.payload,
+        };
+      }
+
+      if (action.type === "SET_IS_PUBLIC") {
+        return {
+          ...state,
+          isPublic: action.payload,
+        };
+      }
+
+      if (action.type === "SET_EVERYTHING") {
+        return action.payload;
+      }
+
+      return {
+        isLoading: false,
+        isPublic: false,
+        publishedAt: null,
+      };
+    });
+
+    dispatch({
+        type: "SET_EVERYTHING",
+        payload: {
+          isLoading: false,
+          isPublic: true,
+          publishedAt: publishedDate,
+        },
+      });
+
+    */
+
+/*
+      const loadAllData = () => {
+    fakeApi.loadUser().then((user) => setUser(user));
+    fakeApi
+      .loadBillingData()
+      .then((billingData) => setBillingData(billingData));
+    fakeApi.loadUserNotes().then((notes) => setNotes(notes));
+
+    // ↓
+
+    Promise.all([
+      fakeApi.loadUser(),
+      fakeApi.loadBillingData(),
+      fakeApi.loadUserNotes(),
+    ])
+      .then(([user, billingData, notes]) => {
+        unstable_batchedUpdates(() => {
+          setUser(user);
+          setBillingData(billingData);
+          setNotes(notes);
+        });
+      })
+      .catch(() => {
+        // Show an error
+      });
+  };
+  */
+
+/*
+  let shouldBatchUpdates = false;
+
+  button.addEventListener("click", () => {
+    unstable_batchedUpdates(() => {
+      togglePublic();
+    });
+  })
+
+  unstable_batchedUpdates = (callback) => {
+    shouldBatchUpdates = true;
+    callback();
+    shouldBatchUpdates = false;
+    processPendingUpdates();
+  }
+
+  useState => setState => (newState) => {
+    if (!shouldBatchUpdates) {
+      // trigger a render immediately with newState
+    } else {
+      renderQueueToProcessLater.push({
+        component: PrimaryPane,
+        stateChanges: [
+          { index: 2, value: newState },
+        ]
+      })
+    }
+  }
+  */
+
 function PrimaryPane({ activeNoteId, notes, saveNote }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
@@ -51,15 +160,32 @@ function PrimaryPane({ activeNoteId, notes, saveNote }) {
 
     if (isPublic) {
       await fakeApi.setPublicStatus(false);
-      setIsPublic(false);
+      unstable_batchedUpdates(() => {
+        setIsPublic(false);
+        setIsLoading(false);
+      });
     } else {
       await fakeApi.setPublicStatus(true);
       const publishedDate = await fakeApi.getPublishedDate();
-      setIsPublic(true);
-      setPublishedAt(publishedDate.toLocaleTimeString());
+      unstable_batchedUpdates(() => {
+        setIsPublic(true);
+        setPublishedAt(publishedDate.toLocaleTimeString());
+        setIsLoading(false);
+      });
     }
+  };
 
+  const flipIsLoading = () => {
+    setIsLoading(true);
     setIsLoading(false);
+    setIsLoading(true);
+    setIsLoading(false);
+    setIsLoading(true);
+    setIsPublic(false);
+    setIsPublic(true);
+    setIsPublic(false);
+    setIsPublic(true);
+    setPublishedAt("21 Dec " + Math.floor(Math.random() * 3000));
   };
 
   if (!activeNoteId) {
@@ -97,6 +223,9 @@ function PrimaryPane({ activeNoteId, notes, saveNote }) {
               : isPublic
               ? "🤫 Make Private"
               : "👀 Make Public"}
+          </Button>
+          <Button variant="outlined" onClick={flipIsLoading}>
+            Flip everything
           </Button>
           {!isLoading && isPublic && <span>Published at: {publishedAt}</span>}
         </div>

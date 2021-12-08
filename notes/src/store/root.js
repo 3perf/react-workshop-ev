@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import fakeApi from "../utils/fakeApi";
 
 class RootStore {
   constructor() {

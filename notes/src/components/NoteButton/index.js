@@ -14,17 +14,23 @@ function NoteButton({
 }) {
   const noteHeader = useRef();
 
-  useLayoutEffect(() => {
-    if (noteHeader.current) {
-      if (noteHeader.current.scrollWidth > noteHeader.current.clientWidth) {
-        noteHeader.current.classList.add("notes-list__note-header_overflowing");
-      } else {
-        noteHeader.current.classList.remove(
-          "notes-list__note-header_overflowing"
-        );
-      }
-    }
-  }, [text]);
+  // useLayoutEffect(() => {
+  //   if (noteHeader.current) {
+  //     const isOverflowing =
+  //       noteHeader.current.scrollWidth > noteHeader.current.clientWidth;
+  //     setTimeout(() => {
+  //       if (isOverflowing) {
+  //         noteHeader.current.classList.add(
+  //           "notes-list__note-header_overflowing"
+  //         );
+  //       } else {
+  //         noteHeader.current.classList.remove(
+  //           "notes-list__note-header_overflowing"
+  //         );
+  //       }
+  //     }, 0);
+  //   }
+  // }, [text]);
 
   const className = [
     "notes-list__button",
