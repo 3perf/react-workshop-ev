@@ -3,11 +3,22 @@
 Welcome! Clone this repo, switch to the `day4` branch, and start the app:
 
 ```sh
-cd notes
 git switch day4
+
+cd notes
+yarn
+yarn start
+
+cd notes-hydration
+yarn
+yarn start
+
+cd widgets-editor
 yarn
 yarn start
 ```
+
+The `widgets-editor` example was kindly contributed by Appsmith and artificially slowed down by Ivan Akulov. Appsmith is a low-code framework for building internal tools: https://appsmith.com
 
 ⌘⌘⌘
 
