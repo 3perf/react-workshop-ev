@@ -30,6 +30,8 @@
   padding: 6px 12px;
   background: var(--note-background);
   border-radius: 4px;
+  /* content-visibility: auto;
+  contain-intrinsic-size: 37px; */
 }
 
 .notes-list__note:hover {

@@ -44,6 +44,13 @@ module.exports = {
         process.env.NODE_ENV === "development"
           ? "react-redux/lib"
           : "react-redux",
+      "react-dom$": "react-dom/profiling",
+      "scheduler/tracing": "scheduler/tracing-profiling",
+    },
+    configure: (webpackConfig) => {
+      webpackConfig.optimization.minimize = false;
+      webpackConfig.optimization.moduleIds = "named";
+      return webpackConfig;
     },
   },
 };

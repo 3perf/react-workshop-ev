@@ -178,7 +178,7 @@ const getButtonHoverAndActiveStyles = (color: Color, filled = true) => {
     border-color: ${filled ? color : "auto"};
     color: ${filled ? Colors.WHITE : "auto"};
     &:hover {
-      background: ${darkenHover(color)};
+      background: #fbf;
       border-color: ${darkenHover(color)};
       box-shadow: none;
     }

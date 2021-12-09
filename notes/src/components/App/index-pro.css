@@ -29,7 +29,7 @@
 }
 
 .notes-list-pro-mode .notes-list__note {
-  font-size: small;
+  /* font-size: small; */
   --note-background: #424242;
   color: white;
 }

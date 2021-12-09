@@ -75,10 +75,10 @@ function App() {
     setNotes(newNotes);
 
     // For convenience, if only a single note was created, activate it
-    if (count === 1) {
-      const noteIds = Object.keys(newNotes);
-      setActiveNoteId(noteIds[noteIds.length - 1]);
-    }
+    // if (count === 1) {
+    //   const noteIds = Object.keys(newNotes);
+    //   setActiveNoteId(noteIds[noteIds.length - 1]);
+    // }
   };
 
   const deleteAllNotes = () => {
